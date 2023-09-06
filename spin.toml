@@ -1,0 +1,27 @@
+spin_manifest_version = "1"
+authors = ["Mikkel Mørk Hegnhøj <mikkel@fermyon.com>"]
+description = ""
+name = "self"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "self"
+source = "target/self.wasm"
+exclude_files = ["**/node_modules"]
+allowed_http_hosts = ["self"]
+[component.trigger]
+route = "/..."
+[component.build]
+command = "npm run build"
+
+[[component]]
+id = "hello"
+source = "hello/target/wasm32-wasi/release/hello.wasm"
+allowed_http_hosts = []
+[component.trigger]
+route = "/hello/..."
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "hello"
+watch = ["src/**/*.rs", "Cargo.toml"]
